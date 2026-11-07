@@ -513,8 +513,10 @@ export class WebServer {
     <button class="tab-btn" data-tab="settings" onclick="switchTab('settings', event)">⚙️ Настройки и статус</button>
   </div>
   <div class="header-actions">
-    <button class="btn btn-outline" id="btnScanAviaSeek" onclick="triggerScanAviaSeek()" title="Запуск живого поиска через AviaSeek (Aviasales Live)" style="border-color:#fbbf24; color:#fbbf24;">🟡 Поиск AviaSeek (Live)</button>
-    <button class="btn btn-outline" id="btnScanFlightApi" onclick="triggerScanFlightApi()" title="Запуск живого поиска через FlightAPI.io">✈️ Поиск FlightAPI (Live)</button>
+    <a href="https://www.google.com/travel/flights?q=Flights%20to%20CAN%20from%20MOW%20on%202027-01-13%20business%20class%20for%202%20adults&hl=ru" target="_blank" class="btn btn-outline" style="border-color:#38bdf8; color:#38bdf8; text-decoration:none;" title="Открыть Google Flights (проверка раскладки 180° кресел и цен)">🌐 Google Flights</a>
+    <a href="https://www.skyscanner.ru/transport/flights/mow/can/270113/?adultsv2=2&cabinclass=business" target="_blank" class="btn btn-outline" style="border-color:#0284c7; color:#38bdf8; text-decoration:none;" title="Открыть Skyscanner">✈️ Skyscanner</a>
+    <button class="btn btn-outline" id="btnScanAviaSeek" onclick="triggerScanAviaSeek()" title="Запуск живого поиска через AviaSeek (Aviasales Live)" style="border-color:#fbbf24; color:#fbbf24;">🟡 AviaSeek (Live)</button>
+    <button class="btn btn-outline" id="btnScanFlightApi" onclick="triggerScanFlightApi()" title="Запуск живого поиска через FlightAPI.io">✈️ FlightAPI</button>
     <button class="btn btn-success" id="btnScanAll" onclick="triggerScanAll()">🔄 Проверить все</button>
     <button class="btn btn-outline" id="btnClearDb" onclick="triggerClearSystem()" title="Очистить кэш тарифов и историю алертов" style="border-color:#f87171; color:#f87171;">🧹 Очистить базу</button>
     <button class="btn btn-primary" onclick="openProfileModal()">➕ Создать поиск</button>
@@ -1298,6 +1300,9 @@ export class WebServer {
       const ddmm = (o.departureDate && o.departureDate.length >= 10) ? (o.departureDate.slice(8, 10) + o.departureDate.slice(5, 7)) : '1301';
       const aviasalesUrl = 'https://www.aviasales.ru/search/' + (o.origin || 'MOW') + ddmm + o.destination + 'c2';
       const aviaseekUrl = 'https://aviaseek.com/search?from=' + (o.origin || 'MOW') + '&to=' + o.destination + '&date=' + o.departureDate + '&adults=' + (o.passengers || 2) + '&cabin=' + (o.cabinClass || 'business');
+      const googleFlightsUrl = 'https://www.google.com/travel/flights?q=Flights%20to%20' + (o.destination || 'CAN') + '%20from%20' + (o.origin || 'MOW') + '%20on%20' + (o.departureDate || '2027-01-13') + '%20' + (o.cabinClass || 'business') + '%20class%20for%20' + (o.passengers || 2) + '%20adults&hl=ru';
+      const skyscannerDate = (o.departureDate && o.departureDate.length >= 10) ? (o.departureDate.slice(2, 4) + o.departureDate.slice(5, 7) + o.departureDate.slice(8, 10)) : '270113';
+      const skyscannerUrl = 'https://www.skyscanner.ru/transport/flights/' + (o.origin || 'mow').toLowerCase() + '/' + (o.destination || 'can').toLowerCase() + '/' + skyscannerDate + '/?adultsv2=' + (o.passengers || 2) + '&cabinclass=' + (o.cabinClass || 'business');
 
       let airlineUrl = '';
       const aUpper = (o.airline || '').toUpperCase();
@@ -1311,11 +1316,17 @@ export class WebServer {
       const airlineLink = airlineUrl ? '<a href="' + airlineUrl + '" target="_blank" style="font-size:0.74rem; color:#38bdf8; display:block; margin-top:2px; text-decoration:underline;">Сайт авиакомпании ↗</a>' : '';
 
       const actionBtn = '<div style="display:flex; flex-direction:column; gap:4px; min-width:160px;">' +
-        '<a href="' + aviasalesUrl + '" target="_blank" class="live-buy-btn" style="background:#0284c7; padding:7px 10px; font-size:0.82rem; justify-content:center;" title="Открыть рейс со всеми продавцами на Aviasales">' +
-          '🛒 Купить (Aviasales)' +
+        '<a href="' + aviasalesUrl + '" target="_blank" class="live-buy-btn" style="background:#0284c7; padding:6px 10px; font-size:0.8rem; justify-content:center;" title="Открыть рейс со всеми продавцами на Aviasales">' +
+          '🛒 Aviasales' +
         '</a>' +
-        '<a href="' + aviaseekUrl + '" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.75rem; justify-content:center; border-color:#475569;" title="Открыть выдачу метапоиска AviaSeek">' +
-          '🟡 Поиск AviaSeek' +
+        '<a href="' + googleFlightsUrl + '" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.75rem; justify-content:center; border-color:#38bdf8; color:#38bdf8;" title="Проверить рейс и раскладку кресел (180° кровать) на Google Flights">' +
+          '🌐 Google Flights' +
+        '</a>' +
+        '<a href="' + skyscannerUrl + '" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.75rem; justify-content:center; border-color:#0ea5e9; color:#bae6fd;" title="Открыть на Skyscanner">' +
+          '✈️ Skyscanner' +
+        '</a>' +
+        '<a href="' + aviaseekUrl + '" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.72rem; justify-content:center; border-color:#475569; color:#94a3b8;" title="Открыть выдачу метапоиска AviaSeek">' +
+          '🟡 AviaSeek' +
         '</a>' +
         airlineLink +
       '</div>';
