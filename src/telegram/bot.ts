@@ -33,7 +33,8 @@ export class TelegramBotService {
       keyboard: [
         [{ text: "🔍 Поиск Aviasales" }, { text: "🏆 ТОП билетов" }],
         [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
-        [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
+        [{ text: "🟡 Поиск AviaSeek" }, { text: "📊 Статус системы" }],
+        [{ text: "🧹 Очистить систему" }]
       ],
       resize_keyboard: true,
       is_persistent: true
@@ -305,6 +306,34 @@ export class TelegramBotService {
       return;
     }
 
+    if (command === "/aviaseek" || lowerText.includes("aviaseek")) {
+      const aviaseekText = `
+🟡 <b>БЫСТРЫЙ ПОИСК В AVIASEEK (МЕТАПОИСК AVIASALES LIVE)</b>
+
+Прямые ссылки для поиска через агрегатор AviaSeek с готовыми параметрами (Бизнес-класс, 2 пассажира, 12–18 января 2027):
+
+✈️ <b>ОСНОВНОЙ ПЕРЕЛЕТ (Бизнес, 12–18 января):</b>
+• 🇨🇳 <b>Москва ➔ Гуанчжоу:</b> <a href="https://aviaseek.com/search?from=MOW&to=CAN&date=2027-01-13&adults=2&cabin=business">AviaSeek Гуанчжоу (CAN)</a>
+• 🇨🇳 <b>Москва ➔ Чэнду:</b> <a href="https://aviaseek.com/search?from=MOW&to=TFU&date=2027-01-13&adults=2&cabin=business">AviaSeek Чэнду (TFU)</a>
+• 🇨🇳 <b>Москва ➔ Пекин:</b> <a href="https://aviaseek.com/search?from=MOW&to=PEK&date=2027-01-13&adults=2&cabin=business">AviaSeek Пекин (PEK)</a>
+
+<i>Примечание: AviaSeek опрашивает агентства в реальном времени, поэтому поиск на 2027 год может занимать 20–30 секунд.</i>
+      `.trim();
+
+      const inlineKeyboard = [
+        [
+          { text: "🇨🇳 Гуанчжоу Бизнес (CAN)", url: "https://aviaseek.com/search?from=MOW&to=CAN&date=2027-01-13&adults=2&cabin=business" },
+          { text: "🇨🇳 Чэнду Бизнес (TFU)", url: "https://aviaseek.com/search?from=MOW&to=TFU&date=2027-01-13&adults=2&cabin=business" }
+        ],
+        [
+          { text: "🇨🇳 Пекин Бизнес (PEK)", url: "https://aviaseek.com/search?from=MOW&to=PEK&date=2027-01-13&adults=2&cabin=business" }
+        ]
+      ];
+
+      await this.sendAlert(aviaseekText, inlineKeyboard);
+      return;
+    }
+
     if (command === "/skyscanner" || lowerText.includes("skyscanner")) {
       const skyText = `
 ✈️ <b>БЫСТРЫЙ ПОИСК В SKYSCANNER (МЕЖДУНАРОДНЫЕ РЕЙСЫ ПО АЗИИ)</b>
@@ -369,7 +398,8 @@ Skyscanner идеально подходит для перелётов межд�
             keyboard: [
               [{ text: "🔍 Поиск Aviasales" }, { text: "🏆 ТОП билетов" }],
               [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
-              [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
+              [{ text: "🟡 Поиск AviaSeek" }, { text: "📊 Статус системы" }],
+              [{ text: "🧹 Очистить систему" }]
             ],
             resize_keyboard: true,
             is_persistent: true
