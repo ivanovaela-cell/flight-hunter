@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: flight-hunter
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: WEB_PORT
+        value: "3000"
+      - key: ENABLE_SCHEDULER
+        value: "true"
+      - key: POLL_INTERVAL_HOURS
+        value: "8"
+      - key: PRIMARY_PROVIDER
+        value: travelpayouts
+      - key: SEARCH_CABIN
+        value: BUSINESS
+      - key: SEARCH_PASSENGERS
+        value: "2"
+      - key: TARGET_BUDGET_USD
+        value: "2000"
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: TRAVELPAYOUTS_TOKEN
+        sync: false
