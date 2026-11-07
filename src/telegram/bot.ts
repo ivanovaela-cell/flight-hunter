@@ -32,7 +32,8 @@ export class TelegramBotService {
     return {
       keyboard: [
         [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
-        [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
+        [{ text: "🌐 Google Flights и Отели" }, { text: "📊 Статус системы" }],
+        [{ text: "🧹 Очистить систему" }]
       ],
       resize_keyboard: true,
       is_persistent: true
@@ -267,6 +268,43 @@ export class TelegramBotService {
       return;
     }
 
+    if (command === "/google" || command === "/hotels" || lowerText.includes("google") || lowerText.includes("отели")) {
+      const googleText = `
+🌐 <b>БЫСТРЫЙ ПОИСК В GOOGLE FLIGHTS И GOOGLE ОТЕЛИ</b>
+
+Прямые ссылки для мгновенного просмотра расписания, удобств, 180° кроватей и цен в реальном времени:
+
+✈️ <b>ДАЛЬНЕЕ ПЛЕЧО (Бизнес 180° кровать, 12–18 января):</b>
+• 🇨🇳 <b>Москва ➔ Гуанчжоу:</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20CAN%20from%20MOW%20on%202027-01-13%20business%20class%20for%202%20adults&hl=ru">Google Flights (Air China / China Southern)</a>
+• 🇨🇳 <b>Москва ➔ Чэнду:</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20TFU%20from%20MOW%20on%202027-01-13%20business%20class%20for%202%20adults&hl=ru">Google Flights (Sichuan Airlines A350)</a>
+• 🇨🇳 <b>Москва ➔ Пекин:</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20PEK%20from%20MOW%20on%202027-01-13%20business%20class%20for%202%20adults&hl=ru">Google Flights (Air China B777)</a>
+
+🏖️ <b>ВТОРОЕ ПЛЕЧО (Курорты из Гуанчжоу, 15–22 января):</b>
+• 🇻🇳 <b>Гуанчжоу ➔ Дананг (Вьетнам):</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20DAD%20from%20CAN%20on%202027-01-16%20for%202%20adults&hl=ru">Google Flights (2 часа!)</a>
+• 🇹🇭 <b>Гуанчжоу ➔ Бангкок (Таиланд):</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20BKK%20from%20CAN%20on%202027-01-16%20for%202%20adults&hl=ru">Google Flights (2.5 часа)</a>
+• 🇹🇭 <b>Гуанчжоу ➔ Пхукет (Таиланд):</b> <a href="https://www.google.com/travel/flights?q=Flights%20to%20HKT%20from%20CAN%20on%202027-01-16%20for%202%20adults&hl=ru">Google Flights (3 часа)</a>
+
+🏨 <b>ОТЕЛИ НА GOOGLE HOTELS:</b>
+• 🇨🇳 <a href="https://www.google.com/travel/hotels?q=Hotels%20in%20Guangzhou&hl=ru">Отели в Гуанчжоу (2–3 дня без визы)</a>
+• 🇻🇳 <a href="https://www.google.com/travel/hotels?q=Hotels%20in%20Da%20Nang&hl=ru">Отели и курорты в Дананге (море)</a>
+• 🇹🇭 <a href="https://www.google.com/travel/hotels?q=Hotels%20in%20Bangkok&hl=ru">Отели в Бангкоке</a>
+      `.trim();
+
+      const inlineKeyboard = [
+        [
+          { text: "🇨🇳 Гуанчжоу Бизнес", url: "https://www.google.com/travel/flights?q=Flights%20to%20CAN%20from%20MOW%20on%202027-01-13%20business%20class%20for%202%20adults&hl=ru" },
+          { text: "🇻🇳 Дананг Пляж (2ч)", url: "https://www.google.com/travel/flights?q=Flights%20to%20DAD%20from%20CAN%20on%202027-01-16%20for%202%20adults&hl=ru" }
+        ],
+        [
+          { text: "🇹🇭 Бангкок (2.5ч)", url: "https://www.google.com/travel/flights?q=Flights%20to%20BKK%20from%20CAN%20on%202027-01-16%20for%202%20adults&hl=ru" },
+          { text: "🏨 Отели Гуанчжоу", url: "https://www.google.com/travel/hotels?q=Hotels%20in%20Guangzhou&hl=ru" }
+        ]
+      ];
+
+      await this.sendAlert(googleText, inlineKeyboard);
+      return;
+    }
+
     if (command === "/daily" || lowerText.includes("сводка")) {
       if (this.handlers?.onGetDailySummary) {
         const dailyText = await this.handlers.onGetDailySummary();
@@ -300,7 +338,8 @@ export class TelegramBotService {
           reply_markup: {
             keyboard: [
               [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
-              [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
+              [{ text: "🌐 Google Flights и Отели" }, { text: "📊 Статус системы" }],
+              [{ text: "🧹 Очистить систему" }]
             ],
             resize_keyboard: true,
             is_persistent: true

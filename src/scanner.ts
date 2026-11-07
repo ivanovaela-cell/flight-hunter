@@ -5,7 +5,7 @@ import { FlightApiProvider } from "./providers/flightapi.ts";
 import { AviaSeekProvider } from "./providers/aviaseek.ts";
 import { DatabaseManager } from "./db/database.ts";
 import { TelegramBotService } from "./telegram/bot.ts";
-import { generateAviasalesLiveUrl } from "./utils/link-generator.ts";
+import { generateAviasalesLiveUrl, generateGoogleFlightsUrl, generateGoogleHotelsUrl } from "./utils/link-generator.ts";
 import type { AppConfig } from "./config.ts";
 import type { SearchProfile, FlightOffer, ScanRunSummary } from "./types.ts";
 
@@ -362,10 +362,23 @@ export class FlightScanner {
                         const messageHtml = this.formatTelegramMessage(offer, profile, prevMin, savings, triggerReason);
                         const buyUrl = offer.deepLink || offer.liveSearchUrl;
                         const airlineUrl = getAirlineOfficialUrl(offer.destination, offer.flightNumber);
+                        const googleUrl = generateGoogleFlightsUrl({
+                          origin: offer.origin,
+                          destination: offer.destination,
+                          departureDate: offer.departureDate,
+                          cabinClass: offer.cabinClass,
+                          passengers: offer.passengers
+                        });
+                        const hotelCity = (offer.destinationName || "").split(" ")[0] || "Asia";
+                        const hotelUrl = generateGoogleHotelsUrl(hotelCity);
                         const inlineKeyboard = [
                           [
-                            { text: "✈️ Сайт авиакомпании", url: airlineUrl },
-                            { text: "🔍 Aviasales", url: buyUrl }
+                            { text: "🌐 Google Flights", url: googleUrl },
+                            { text: "✈️ Авиакомпания", url: airlineUrl }
+                          ],
+                          [
+                            { text: "🔍 Aviasales", url: buyUrl },
+                            { text: "🏨 Отели", url: hotelUrl }
                           ],
                           [
                             { text: "🧹 Очистить поиск", callback_data: "clear_system" }
@@ -537,10 +550,23 @@ export class FlightScanner {
                       const messageHtml = this.formatTelegramMessage(offer, profile, prevMin, savings, triggerReason);
                       const buyUrl = offer.deepLink || offer.liveSearchUrl;
                       const airlineUrl = getAirlineOfficialUrl(offer.destination, offer.flightNumber);
+                      const googleUrl = generateGoogleFlightsUrl({
+                        origin: offer.origin,
+                        destination: offer.destination,
+                        departureDate: offer.departureDate,
+                        cabinClass: offer.cabinClass,
+                        passengers: offer.passengers
+                      });
+                      const hotelCity = (offer.destinationName || "").split(" ")[0] || "Asia";
+                      const hotelUrl = generateGoogleHotelsUrl(hotelCity);
                       const inlineKeyboard = [
                         [
-                          { text: "✈️ Сайт авиакомпании", url: airlineUrl },
-                          { text: "🔍 Aviasales", url: buyUrl }
+                          { text: "🌐 Google Flights", url: googleUrl },
+                          { text: "✈️ Авиакомпания", url: airlineUrl }
+                        ],
+                        [
+                          { text: "🔍 Aviasales", url: buyUrl },
+                          { text: "🏨 Отели", url: hotelUrl }
                         ],
                         [
                           { text: "🧹 Очистить поиск", callback_data: "clear_system" }

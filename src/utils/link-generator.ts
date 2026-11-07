@@ -77,3 +77,26 @@ export function generateAviasalesLiveUrl(params: LiveLinkParams): string {
 
   return url;
 }
+
+/**
+ * Generates an exact search URL for Google Flights.
+ * Opens Google Flights in Russian with pre-filled route, dates, cabin class and passengers.
+ */
+export function generateGoogleFlightsUrl(params: LiveLinkParams): string {
+  const origin = params.origin.toUpperCase().trim();
+  const dest = params.destination.toUpperCase().trim();
+  const date = params.departureDate.slice(0, 10);
+  const cabin = (params.cabinClass || "").toLowerCase() === "business" ? "business" : "economy";
+  const pax = params.passengers || 2;
+
+  const query = `Flights to ${dest} from ${origin} on ${date} ${cabin} class for ${pax} adults`;
+  return `https://www.google.com/travel/flights?q=${encodeURIComponent(query)}&hl=ru`;
+}
+
+/**
+ * Generates a direct search URL for Google Hotels / отели.
+ */
+export function generateGoogleHotelsUrl(city: string): string {
+  const query = `Hotels in ${city}`;
+  return `https://www.google.com/travel/hotels?q=${encodeURIComponent(query)}&hl=ru`;
+}
