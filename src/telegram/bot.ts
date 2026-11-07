@@ -32,8 +32,8 @@ export class TelegramBotService {
     return {
       keyboard: [
         [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
-        [{ text: "🌐 Google Flights и Отели" }, { text: "📊 Статус системы" }],
-        [{ text: "🧹 Очистить систему" }]
+        [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
+        [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
       ],
       resize_keyboard: true,
       is_persistent: true
@@ -305,6 +305,36 @@ export class TelegramBotService {
       return;
     }
 
+    if (command === "/skyscanner" || lowerText.includes("skyscanner")) {
+      const skyText = `
+✈️ <b>БЫСТРЫЙ ПОИСК В SKYSCANNER (МЕЖДУНАРОДНЫЕ РЕЙСЫ ПО АЗИИ)</b>
+
+Skyscanner идеально подходит для перелётов между Китаем, Вьетнамом и Таиландом на 2 человек (прямые рейсы):
+
+🇻🇳 <b>КУРОРТЫ ВЬЕТНАМА ИЗ ГУАНЧЖОУ (15–22 января):</b>
+• <b>Гуанчжоу ➔ Дананг (Пляжи):</b> <a href="https://www.skyscanner.net/transport/flights/can/dad/270116/?adultsv2=2&cabinclass=economy&preferdirects=true">Открыть в Skyscanner (2 часа лёта!)</a>
+• <b>Гуанчжоу ➔ Ханой:</b> <a href="https://www.skyscanner.net/transport/flights/can/han/270116/?adultsv2=2&cabinclass=economy&preferdirects=true">Открыть в Skyscanner (1 час 45 мин)</a>
+
+🇹🇭 <b>ТАИЛАНД ИЗ ГУАНЧЖОУ (15–22 января):</b>
+• <b>Гуанчжоу ➔ Бангкок:</b> <a href="https://www.skyscanner.net/transport/flights/can/bkk/270116/?adultsv2=2&cabinclass=economy&preferdirects=true">Открыть в Skyscanner (2.5 часа)</a>
+• <b>Гуанчжоу ➔ Пхукет:</b> <a href="https://www.skyscanner.net/transport/flights/can/hkt/270116/?adultsv2=2&cabinclass=economy&preferdirects=true">Открыть в Skyscanner (3 часа)</a>
+      `.trim();
+
+      const inlineKeyboard = [
+        [
+          { text: "🇻🇳 Дананг (Skyscanner, 2ч)", url: "https://www.skyscanner.net/transport/flights/can/dad/270116/?adultsv2=2&cabinclass=economy&preferdirects=true" },
+          { text: "🇹🇭 Бангкок (Skyscanner, 2.5ч)", url: "https://www.skyscanner.net/transport/flights/can/bkk/270116/?adultsv2=2&cabinclass=economy&preferdirects=true" }
+        ],
+        [
+          { text: "🇻🇳 Ханой (Skyscanner)", url: "https://www.skyscanner.net/transport/flights/can/han/270116/?adultsv2=2&cabinclass=economy&preferdirects=true" },
+          { text: "🇹🇭 Пхукет (Skyscanner)", url: "https://www.skyscanner.net/transport/flights/can/hkt/270116/?adultsv2=2&cabinclass=economy&preferdirects=true" }
+        ]
+      ];
+
+      await this.sendAlert(skyText, inlineKeyboard);
+      return;
+    }
+
     if (command === "/daily" || lowerText.includes("сводка")) {
       if (this.handlers?.onGetDailySummary) {
         const dailyText = await this.handlers.onGetDailySummary();
@@ -338,8 +368,8 @@ export class TelegramBotService {
           reply_markup: {
             keyboard: [
               [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
-              [{ text: "🌐 Google Flights и Отели" }, { text: "📊 Статус системы" }],
-              [{ text: "🧹 Очистить систему" }]
+              [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
+              [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
             ],
             resize_keyboard: true,
             is_persistent: true

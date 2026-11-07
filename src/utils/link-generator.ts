@@ -79,6 +79,33 @@ export function generateAviasalesLiveUrl(params: LiveLinkParams): string {
 }
 
 /**
+ * Formats YYYY-MM-DD into YYMMDD format for Skyscanner URL.
+ */
+export function formatSkyscannerDate(isoDate: string): string {
+  const clean = (isoDate || "").trim().slice(0, 10);
+  const parts = clean.split("-");
+  if (parts.length < 3) return "";
+  const yy = parts[0].slice(2, 4);
+  const mm = parts[1].padStart(2, "0");
+  const dd = parts[2].padStart(2, "0");
+  return `${yy}${mm}${dd}`;
+}
+
+/**
+ * Generates an exact search URL for Skyscanner.
+ * Perfect for international intra-Asia flights (Guangzhou -> Vietnam/Thailand).
+ */
+export function generateSkyscannerUrl(params: LiveLinkParams): string {
+  const origin = (params.origin || "").toLowerCase().trim();
+  const dest = (params.destination || "").toLowerCase().trim();
+  const dateStr = formatSkyscannerDate(params.departureDate);
+  const cabin = (params.cabinClass || "").toLowerCase() === "business" ? "business" : "economy";
+  const pax = params.passengers || 2;
+
+  return `https://www.skyscanner.net/transport/flights/${origin}/${dest}/${dateStr}/?adultsv2=${pax}&cabinclass=${cabin}&preferdirects=true`;
+}
+
+/**
  * Generates an exact search URL for Google Flights.
  * Opens Google Flights in Russian with pre-filled route, dates, cabin class and passengers.
  */

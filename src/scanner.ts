@@ -5,7 +5,7 @@ import { FlightApiProvider } from "./providers/flightapi.ts";
 import { AviaSeekProvider } from "./providers/aviaseek.ts";
 import { DatabaseManager } from "./db/database.ts";
 import { TelegramBotService } from "./telegram/bot.ts";
-import { generateAviasalesLiveUrl, generateGoogleFlightsUrl, generateGoogleHotelsUrl } from "./utils/link-generator.ts";
+import { generateAviasalesLiveUrl, generateGoogleFlightsUrl, generateGoogleHotelsUrl, generateSkyscannerUrl } from "./utils/link-generator.ts";
 import type { AppConfig } from "./config.ts";
 import type { SearchProfile, FlightOffer, ScanRunSummary } from "./types.ts";
 
@@ -371,11 +371,25 @@ export class FlightScanner {
                         });
                         const hotelCity = (offer.destinationName || "").split(" ")[0] || "Asia";
                         const hotelUrl = generateGoogleHotelsUrl(hotelCity);
+
+                        const isRussianOrigin = ["MOW", "SVO", "DME", "VKO", "LED"].includes((offer.origin || "").toUpperCase());
+                        const skyscannerUrl = !isRussianOrigin ? generateSkyscannerUrl({
+                          origin: offer.origin,
+                          destination: offer.destination,
+                          departureDate: offer.departureDate,
+                          cabinClass: offer.cabinClass,
+                          passengers: offer.passengers
+                        }) : undefined;
+
+                        const row1 = [
+                          { text: "🌐 Google Flights", url: googleUrl },
+                          skyscannerUrl
+                            ? { text: "✈️ Skyscanner", url: skyscannerUrl }
+                            : { text: "✈️ Авиакомпания", url: airlineUrl }
+                        ];
+
                         const inlineKeyboard = [
-                          [
-                            { text: "🌐 Google Flights", url: googleUrl },
-                            { text: "✈️ Авиакомпания", url: airlineUrl }
-                          ],
+                          row1,
                           [
                             { text: "🔍 Aviasales", url: buyUrl },
                             { text: "🏨 Отели", url: hotelUrl }
@@ -559,11 +573,25 @@ export class FlightScanner {
                       });
                       const hotelCity = (offer.destinationName || "").split(" ")[0] || "Asia";
                       const hotelUrl = generateGoogleHotelsUrl(hotelCity);
+
+                      const isRussianOrigin = ["MOW", "SVO", "DME", "VKO", "LED"].includes((offer.origin || "").toUpperCase());
+                      const skyscannerUrl = !isRussianOrigin ? generateSkyscannerUrl({
+                        origin: offer.origin,
+                        destination: offer.destination,
+                        departureDate: offer.departureDate,
+                        cabinClass: offer.cabinClass,
+                        passengers: offer.passengers
+                      }) : undefined;
+
+                      const row1 = [
+                        { text: "🌐 Google Flights", url: googleUrl },
+                        skyscannerUrl
+                          ? { text: "✈️ Skyscanner", url: skyscannerUrl }
+                          : { text: "✈️ Авиакомпания", url: airlineUrl }
+                      ];
+
                       const inlineKeyboard = [
-                        [
-                          { text: "🌐 Google Flights", url: googleUrl },
-                          { text: "✈️ Авиакомпания", url: airlineUrl }
-                        ],
+                        row1,
                         [
                           { text: "🔍 Aviasales", url: buyUrl },
                           { text: "🏨 Отели", url: hotelUrl }
