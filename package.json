@@ -18,6 +18,9 @@
     "aviasales",
     "travelpayouts"
   ],
+  "engines": {
+    "node": ">=22.6.0"
+  },
   "author": "",
   "license": "ISC"
 }
