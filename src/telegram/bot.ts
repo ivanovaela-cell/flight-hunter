@@ -31,7 +31,7 @@ export class TelegramBotService {
   private getKeyboardMarkup() {
     return {
       keyboard: [
-        [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
+        [{ text: "🔍 Поиск Aviasales" }, { text: "🏆 ТОП билетов" }],
         [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
         [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
       ],
@@ -251,9 +251,9 @@ export class TelegramBotService {
       return;
     }
 
-    if (command === "/search" || lowerText.includes("найти билеты")) {
+    if (command === "/search" || lowerText.includes("aviasales") || lowerText.includes("найти билеты")) {
       if (this.handlers?.onManualSearch) {
-        await this.reply(chatId, "🔄 <i>Запускаю поиск по всем направлениям Азии... Это займет около 15–20 секунд.</i>");
+        await this.reply(chatId, "🔄 <i>Запускаю живой поиск через Aviasales по всем направлениям... Это займет около 15–20 секунд.</i>");
         const result = await this.handlers.onManualSearch();
         await this.reply(chatId, result);
       }
@@ -367,7 +367,7 @@ Skyscanner идеально подходит для перелётов межд�
           disable_web_page_preview: false,
           reply_markup: {
             keyboard: [
-              [{ text: "🔍 Найти билеты сейчас" }, { text: "🏆 ТОП билетов" }],
+              [{ text: "🔍 Поиск Aviasales" }, { text: "🏆 ТОП билетов" }],
               [{ text: "🌐 Google Flights и Отели" }, { text: "✈️ Skyscanner (Азия)" }],
               [{ text: "📊 Статус системы" }, { text: "🧹 Очистить систему" }]
             ],
