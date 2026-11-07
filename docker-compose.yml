@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  flight-hunter:
+    build: .
+    container_name: flight-hunter
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - WEB_PORT=3000
+      - DATABASE_PATH=/app/data/flights.db

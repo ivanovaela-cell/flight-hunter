@@ -1,0 +1,23 @@
+{
+  "name": "flight-hunter",
+  "version": "1.0.0",
+  "description": "Flight Hunter v1.0 - Automated Universal Flight Deal Monitoring & Live Verification",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --experimental-strip-types src/index.ts",
+    "scan": "node --env-file-if-exists=.env --experimental-strip-types src/cli-search.ts",
+    "probe:single": "node --env-file-if-exists=.env --experimental-strip-types src/search-single.ts",
+    "test": "node --env-file-if-exists=.env --experimental-strip-types src/test-suite.ts"
+  },
+  "keywords": [
+    "flights",
+    "travel",
+    "business-class",
+    "monitoring",
+    "aviasales",
+    "travelpayouts"
+  ],
+  "author": "",
+  "license": "ISC"
+}
