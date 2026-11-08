@@ -62,6 +62,12 @@ export class WebServer {
     }
 
     try {
+      if (url.pathname === "/ping" || url.pathname === "/health") {
+        res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+        res.end(JSON.stringify({ status: "ok" }));
+        return;
+      }
+
       if (url.pathname.startsWith("/api/")) {
         await this.handleApi(url, method, req, res);
         return;
